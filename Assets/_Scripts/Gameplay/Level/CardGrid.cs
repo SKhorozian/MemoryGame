@@ -13,7 +13,8 @@ namespace MemoryGame.Gameplay
         [SerializeField] private LevelManager _levelManager;
         [SerializeField] private ScoreTracker _scoreTracker;
         [SerializeField] private GameObject _startButton;
-        
+        [SerializeField] private LevelView _levelView;
+
         private GameObject[] _columns = Array.Empty<GameObject>();
         private CardModel[] _models = Array.Empty<CardModel>();
         private CardView[] _views = Array.Empty<CardView>();
@@ -152,6 +153,8 @@ namespace MemoryGame.Gameplay
         {
             if (_matches >= _matchesToWin) 
             {
+                _levelView.CompletedLevel();
+                _scoreTracker.StoreScore();
                 _levelManager.GoToNextLevel();
             }
         }

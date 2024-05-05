@@ -12,6 +12,17 @@ namespace MemoryGame.Gameplay
         private int _score = 0;
         private int _combo = 0;
 
+        private int _storedScore = 0;
+
+        public void SetScore(int score)
+        {
+            _score = score;
+            
+            _scoreView.SetScore(_score);
+
+            StoreScore();
+        }
+
         public void AddScore()
         {
             _score += _scorePerMatch + (_combo * _comboBonus);
@@ -27,5 +38,12 @@ namespace MemoryGame.Gameplay
             
             _scoreView.SetCombo(_combo);
         }
+
+        public void StoreScore()
+        {
+            _storedScore = _score;
+        }
+
+        public int StoredScore => _storedScore;
     }
 }

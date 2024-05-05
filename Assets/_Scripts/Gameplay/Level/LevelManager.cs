@@ -7,11 +7,13 @@ namespace MemoryGame.Gameplay
         [SerializeField] private LevelData[] _levels;
         [SerializeField] private CardGrid _grid;
         [SerializeField] private LevelView _levelView;
-
-        private int _currentLevel = 0;
+        [SerializeField] private GameStateSaver _gameStateSaver;
         
-        private void Start()
+        private int _currentLevel = 0;
+
+        public void StartGame(int startingLevel)
         {
+            _currentLevel = startingLevel - 1;
             GoToNextLevel();
         }
 
@@ -35,7 +37,9 @@ namespace MemoryGame.Gameplay
 
         private void GameCompleted()
         {
-            
+            _gameStateSaver.ResetSave();
         }
+
+        public int Level => _currentLevel;
     }
 }
