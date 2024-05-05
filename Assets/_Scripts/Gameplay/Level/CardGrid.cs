@@ -10,26 +10,39 @@ namespace MemoryGame.Gameplay
         [SerializeField] private CardView _cardViewPrefab;
         [SerializeField] private GameObject _columnPrefab;
         [SerializeField] private Transform _rowRoot;
+        [SerializeField] private LevelManager _levelManager;
+        [SerializeField] private ScoreTracker _scoreTracker;
+        [SerializeField] private GameObject _startButton;
         
         private GameObject[] _columns = Array.Empty<GameObject>();
         private CardModel[] _models = Array.Empty<CardModel>();
         private CardView[] _views = Array.Empty<CardView>();
 
+        
         private CardModel _firstSelection = null;
+
+        private int _matchesToWin = 0;
+        private int _matches = 0;
 
         public void UpdateGrid(LevelData levelData)
         {
-            foreach (CardView view in _views) 
+            foreach (GameObject column in _columns) 
             {
-                Destroy(view);
+                Destroy(column);
             }
 
+            _matches = 0;
+            _matchesToWin = levelData.Cards.Length;
+            
             int gridSize = levelData.Cards.Length * 2;
 
             if (gridSize > (levelData.Width * levelData.Height)) 
             {
                 Debug.LogError("Grid dimensions cannot fit all cards.");
+                return;
             }
+
+            _scoreTracker.ResetCombo();
 
             _models = new CardModel[gridSize];
 
@@ -53,9 +66,22 @@ namespace MemoryGame.Gameplay
                     
                     _models[randomIndex] = new CardModel(data, randomIndex);
                     
-                    _views[randomIndex].UpdateView(data, randomIndex, () => Select(randomIndex));
+                    _views[randomIndex].UpdateView(data, () => Select(randomIndex));
                 }
             }
+            
+            _startButton.SetActive(true);
+        }
+
+        public void HideAll()
+        {
+            foreach (CardView cardView in _views) 
+            {
+                cardView.Enable();
+                cardView.HideInstant();
+            }
+            
+            _startButton.SetActive(false);
         }
 
         private void Select(int cardIndex)
@@ -86,11 +112,18 @@ namespace MemoryGame.Gameplay
             {
                 _views[_firstSelection.Index].Disable();
                 _views[cardIndex].RevealAndDisable();
+
+                _scoreTracker.AddScore();
+                
+                _matches++;
+                CheckIfLevelCompleted();
             }
             else 
             {
                 _views[_firstSelection.Index].Hide();
                 _views[cardIndex].RevealAndHide();
+                
+                _scoreTracker.ResetCombo();
             }
 
             _firstSelection = null;
@@ -99,16 +132,27 @@ namespace MemoryGame.Gameplay
         private void PrepareViews(int width, int height)
         {
             _views = new CardView[width * height];
-
+            _columns = new GameObject[width];
+            
             for (int i = 0; i < width; i++) 
             {
                 GameObject column = Instantiate(_columnPrefab, _rowRoot);
 
+                _columns[i] = column;
+                
                 for (int j = 0; j < height; j++) 
                 {
                     int index = height * i + j;
                     _views[index] = Instantiate(_cardViewPrefab, column.transform);
                 }
+            }
+        }
+
+        private void CheckIfLevelCompleted()
+        {
+            if (_matches >= _matchesToWin) 
+            {
+                _levelManager.GoToNextLevel();
             }
         }
 

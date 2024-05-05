@@ -12,19 +12,22 @@ namespace MemoryGame.Gameplay
         [SerializeField] private GameObject _cardBack;
         [SerializeField] private Button _button;
         [SerializeField] private Animator _animator;
-        
-        private int _indexInGrid;
 
-        public void UpdateView(CardData data, int indexInGrid, Action onClick)
+        public void UpdateView(CardData data, Action onClick)
         {
             _frontSprite.sprite = data.CardArt;
-            _indexInGrid = indexInGrid;
 
-            _frontSprite.gameObject.SetActive(false);
+            _frontSprite.gameObject.SetActive(true);
             _cardBack.SetActive(true);
-            
+            _button.enabled = false;
+
             _button.onClick.RemoveAllListeners();
             _button.onClick.AddListener(new UnityAction(onClick));
+        }
+
+        public void Enable()
+        {
+            _button.enabled = true;
         }
 
         public void Reveal()
@@ -36,6 +39,12 @@ namespace MemoryGame.Gameplay
         {
             _animator.Play("Hide");
         }
+        
+        public void HideInstant()
+        {
+            _animator.Play("Hidden");
+        }
+
 
         public void RevealAndDisable()
         {

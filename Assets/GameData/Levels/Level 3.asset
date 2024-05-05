@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 51e5dbf3748fb5d4a9ef57a899ca1a09, type: 3}
-  m_Name: Level 1
+  m_Name: Level 3
   m_EditorClassIdentifier: 
-  _width: 2
+  _width: 4
   _height: 3
   _cards:
   - _id: man
@@ -21,3 +21,9 @@ MonoBehaviour:
     _art: {fileID: 21300000, guid: 9125c204f566db048a92ebcb64d9d14a, type: 3}
   - _id: edge
     _art: {fileID: 21300000, guid: 1f21190ca9d1e8540b2a3a2e46002685, type: 3}
+  - _id: plus
+    _art: {fileID: 21300000, guid: f618c5fe13b18994aa5aee8b97d8dca1, type: 3}
+  - _id: lines
+    _art: {fileID: 21300000, guid: c7aa62ae78ffca0498c89e5f45f94c0e, type: 3}
+  - _id: mail
+    _art: {fileID: 21300000, guid: ddf2e76e8a1f88f46ae1e42277850b48, type: 3}
