@@ -1952,6 +1952,7 @@ MonoBehaviour:
   _grid: {fileID: 1862241610}
   _levelView: {fileID: 1573733497}
   _gameStateSaver: {fileID: 1616198988}
+  _mainMenuSceneIndex: 0
 --- !u!114 &1862241609
 MonoBehaviour:
   m_ObjectHideFlags: 0
