@@ -2,18 +2,13 @@ namespace MemoryGame.Gameplay
 {
     public class CardModel
     {
-        private CardData _data;
-        private bool _isRevealed;
-        private bool _isScored;
-        
-        public CardModel(CardData data)
+        public CardModel(CardData data, int index)
         {
-            _data = data;
+            Index = index;
+            CardData = data;
         }
 
-        public void Reveal()
-        {
-            
-        }
+        public CardData CardData { get; }
+        public int Index { get; }
     }
 }

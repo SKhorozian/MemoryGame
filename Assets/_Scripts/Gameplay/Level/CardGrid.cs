@@ -15,6 +15,8 @@ namespace MemoryGame.Gameplay
         private CardModel[] _models = Array.Empty<CardModel>();
         private CardView[] _views = Array.Empty<CardView>();
 
+        private CardModel _firstSelection = null;
+
         public void UpdateGrid(LevelData levelData)
         {
             foreach (CardView view in _views) 
@@ -30,7 +32,6 @@ namespace MemoryGame.Gameplay
             }
 
             _models = new CardModel[gridSize];
-            _views = new CardView[gridSize];
 
             HashSet<int> usedIndex = new();
 
@@ -50,32 +51,63 @@ namespace MemoryGame.Gameplay
 
                     usedIndex.Add(randomIndex);
                     
-                    _models[randomIndex] = new CardModel(data);
+                    _models[randomIndex] = new CardModel(data, randomIndex);
                     
-                    _views[randomIndex].UpdateView(data, randomIndex);
+                    _views[randomIndex].UpdateView(data, randomIndex, () => Select(randomIndex));
                 }
             }
-            
         }
 
+        private void Select(int cardIndex)
+        {
+            if (cardIndex >= _models.Length) 
+            {
+                Debug.LogWarning("Index out of card array bounds.");
+                return;
+            }
+
+            if (_firstSelection == null) 
+            {
+                _firstSelection = _models[cardIndex];
+                
+                _views[cardIndex].Reveal();
+                
+                return;
+            }
+
+            if (_firstSelection.Index == cardIndex) 
+            {
+                return;
+            }
+
+            CardModel secondSelection = _models[cardIndex];
+
+            if (secondSelection.CardData.DoCardsMatch(_firstSelection.CardData)) 
+            {
+                _views[_firstSelection.Index].Disable();
+                _views[cardIndex].RevealAndDisable();
+            }
+            else 
+            {
+                _views[_firstSelection.Index].Hide();
+                _views[cardIndex].RevealAndHide();
+            }
+
+            _firstSelection = null;
+        }
+        
         private void PrepareViews(int width, int height)
         {
-            int viewIndex = 0;
-            
+            _views = new CardView[width * height];
+
             for (int i = 0; i < width; i++) 
             {
                 GameObject column = Instantiate(_columnPrefab, _rowRoot);
 
                 for (int j = 0; j < height; j++) 
                 {
-                    if (viewIndex >= _views.Length) 
-                    {
-                        return;
-                    }
-
-                    _views[viewIndex] = Instantiate(_cardViewPrefab, column.transform);
-
-                    viewIndex++;
+                    int index = height * i + j;
+                    _views[index] = Instantiate(_cardViewPrefab, column.transform);
                 }
             }
         }
