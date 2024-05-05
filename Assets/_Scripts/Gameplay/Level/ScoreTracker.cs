@@ -44,6 +44,7 @@ namespace MemoryGame.Gameplay
             _storedScore = _score;
         }
 
+        public int Combo => _combo;
         public int StoredScore => _storedScore;
     }
 }

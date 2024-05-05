@@ -15,6 +15,11 @@ namespace MemoryGame.Gameplay
         [SerializeField] private GameObject _startButton;
         [SerializeField] private LevelView _levelView;
 
+        [Space(10)]
+        [SerializeField] private AudioClip _matchAudioClip;
+        [SerializeField] private AudioClip _failAudioClip;
+        [SerializeField] private float _pitchPerCombo = 0.1f;
+        
         private GameObject[] _columns = Array.Empty<GameObject>();
         private CardModel[] _models = Array.Empty<CardModel>();
         private CardView[] _views = Array.Empty<CardView>();
@@ -118,6 +123,8 @@ namespace MemoryGame.Gameplay
                 
                 _matches++;
                 CheckIfLevelCompleted();
+                
+                AudioPlayer.Instance.PlayClip(_matchAudioClip, _scoreTracker.Combo * _pitchPerCombo + 1f);
             }
             else 
             {
@@ -125,6 +132,7 @@ namespace MemoryGame.Gameplay
                 _views[cardIndex].RevealAndHide();
                 
                 _scoreTracker.ResetCombo();
+                AudioPlayer.Instance.PlayClip(_failAudioClip);
             }
 
             _firstSelection = null;

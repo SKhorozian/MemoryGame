@@ -13,6 +13,9 @@ namespace MemoryGame.Gameplay
         [SerializeField] private Button _button;
         [SerializeField] private Animator _animator;
 
+        [Space(10)] 
+        [SerializeField] private AudioClip _flipAudioClip;
+        
         public void UpdateView(CardData data, Action onClick)
         {
             _frontSprite.sprite = data.CardArt;
@@ -33,11 +36,13 @@ namespace MemoryGame.Gameplay
         public void Reveal()
         {
             _animator.Play("Reveal");
+            AudioPlayer.Instance.PlayClip(_flipAudioClip);
         }
 
         public void Hide()
         {
             _animator.Play("Hide");
+            AudioPlayer.Instance.PlayClip(_flipAudioClip);
         }
         
         public void HideInstant()

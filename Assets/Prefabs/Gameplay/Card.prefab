@@ -267,6 +267,7 @@ MonoBehaviour:
   _cardBack: {fileID: 792778180502066373}
   _button: {fileID: 792778180502066371}
   _animator: {fileID: 2537189147971809907}
+  _flipAudioClip: {fileID: 8300000, guid: ee8eab231ff31354996bd401a5e53df2, type: 3}
 --- !u!95 &2537189147971809907
 Animator:
   serializedVersion: 5
